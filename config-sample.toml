@@ -1,0 +1,6 @@
+# Rename to config.toml
+
+user = "fill user!"
+password = "fill password!"
+basedir = "downloads/beginner1"
+course-url = "https://www.guitartricks.com/lesson.php?input=21986&s_id=1766"

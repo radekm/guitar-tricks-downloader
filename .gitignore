@@ -1,0 +1,8 @@
+# Ignore file with username and password.
+/config.toml
+
+# Created after running.
+/downloads/
+
+/.idea/
+/.DS_store
