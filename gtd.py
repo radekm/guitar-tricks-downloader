@@ -116,7 +116,7 @@ def sanitize(name):
 
     result = removed_special_chars
 
-    if not re.fullmatch("[a-zA-Z0-9-, ()]+", result):
+    if not re.fullmatch("[a-zA-Z0-9-, ()#]+", result):
         raise Exception(f"Not sanitized properly '{result}'.")
     else:
         return result
