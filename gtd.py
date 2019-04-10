@@ -2,13 +2,14 @@ import os
 import re
 from dataclasses import dataclass
 from os import path
+from typing import List, Iterator, Optional
 
 import requests
 import toml
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag, PageElement
 
 
-def login(user, password):
+def login(user: str, password: str) -> requests.Session:
     sess = requests.Session()
 
     login_page = "https://www.guitartricks.com/process/loginAjax"
@@ -29,15 +30,15 @@ def login(user, password):
 
 @dataclass
 class Lesson:
-    chapter: str
-    tutorial: str
+    chapter: Optional[str]
+    tutorial: Optional[str]
     tutorial_number: int
     lesson: str
     lesson_url: str
     lesson_number: int
 
 
-def get_lessons_from_lesson_list(chapter, tutorial, tutorial_number, lesson_list):
+def get_lessons_from_lesson_list(chapter: Optional[str], tutorial: Optional[str], tutorial_number: int, lesson_list: Tag) -> Iterator[Lesson]:
     lesson_number = 0
     for item in lesson_list:
         if isinstance(item, Tag) and "course__lessonTitle" in item["class"]:
@@ -55,7 +56,7 @@ def get_lessons_from_lesson_list(chapter, tutorial, tutorial_number, lesson_list
             raise Exception(f"Unknown item in lesson list: {item}")
 
 
-def get_lessons_from_tutorial_list(chapter, tutorial_list):
+def get_lessons_from_tutorial_list(chapter: Optional[str], tutorial_list: Tag) -> Iterator[Lesson]:
     tutorial = None
     tutorial_number = 0
     for item in tutorial_list:
@@ -70,7 +71,7 @@ def get_lessons_from_tutorial_list(chapter, tutorial_list):
             raise Exception(f"Unknown item in tutorial list: {item}")
 
 
-def get_lessons_from_chapter_list(chapter_list):
+def get_lessons_from_chapter_list(chapter_list: Iterator[PageElement]) -> Iterator[Lesson]:
     chapter = None
     for item in chapter_list:
         if isinstance(item, Tag) and "course__chapterTitle" in item["class"]:
@@ -83,7 +84,7 @@ def get_lessons_from_chapter_list(chapter_list):
             raise Exception(f"Unknown item in chapter list: {item}")
 
 
-def get_lessons(sess, course_url):
+def get_lessons(sess: requests.Session, course_url: str) -> List[Lesson]:
     soup = BeautifulSoup(sess.get(course_url).text, features="html.parser")
     chapter_list = soup.find("div", {"class": "course__chapterList"}).children
     return list(get_lessons_from_chapter_list(chapter_list))

@@ -5,4 +5,5 @@
 /downloads/
 
 /.idea/
+/.mypy_cache/
 /.DS_store
