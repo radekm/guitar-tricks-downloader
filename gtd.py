@@ -100,11 +100,13 @@ def to_abs_url(rel_url):
 
 
 def download_file(sess, url, local_file):
+    tmp_file = local_file + ".part"
     with sess.get(url, stream=True) as r:
-        with open(local_file, 'wb') as f:
+        with open(tmp_file, 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
+    os.rename(tmp_file, local_file)
 
 
 def sanitize(name):
