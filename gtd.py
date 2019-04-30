@@ -112,7 +112,8 @@ def download_file(sess, url, local_file):
 def sanitize(name):
     replaced_colon = re.sub("\\b: ", " - ", name)
     replaced_ampersand = re.sub(" & ", " and ", replaced_colon)
-    replaced_slash_in_fraction = re.sub("(\\d)/(\\d)", "\\1 over \\2", replaced_ampersand)
+    replaced_ndash = re.sub("–", "-", replaced_ampersand)
+    replaced_slash_in_fraction = re.sub("(\\d)/(\\d)", "\\1 over \\2", replaced_ndash)
     removed_special_chars = re.sub("[?!'.]", "", replaced_slash_in_fraction)
 
     result = removed_special_chars
