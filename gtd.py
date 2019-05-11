@@ -114,7 +114,7 @@ def sanitize(name):
     replaced_ampersand = re.sub(" & ", " and ", replaced_colon)
     replaced_ndash = re.sub("–", "-", replaced_ampersand)
     replaced_slash_in_fraction = re.sub("(\\d)/(\\d)", "\\1 over \\2", replaced_ndash)
-    removed_special_chars = re.sub("[?!'.]", "", replaced_slash_in_fraction)
+    removed_special_chars = re.sub("[?!'./“”]", "", replaced_slash_in_fraction)
 
     result = removed_special_chars
 
